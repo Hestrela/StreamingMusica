@@ -1,8 +1,51 @@
 public class Musica {
 
-    String titulo;
-    String artista;
-    int duracao;
-    String genero;
+    private String titulo;
+    private String artista;
+    private int duracaoSegundos;
+    private String genero;
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        if (titulo == null) {
+            System.out.println("Título não deve ser nulo");      
+        } else {
+            String tituloCorreto = titulo.trim();
+            if (tituloCorreto.isEmpty()) {
+                System.out.println("Título não deve ser vazio");
+            } else {
+                this.titulo = tituloCorreto;
+            }
+        }
+    }
+
+    public String getArtista() {
+        return artista;
+    }
+
+    public void setArtista(String artista) {
+        this.artista = artista;
+    }
+
+    public int getDuracao() {
+        return duracaoSegundos;
+    }
+
+    public void setDuracao(int duracao) {
+        this.duracaoSegundos = duracao;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+
 
 }
