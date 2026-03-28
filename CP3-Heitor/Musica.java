@@ -44,7 +44,11 @@ public class Musica {
     }
 
     public void setDuracao(int duracao) {
-        this.duracaoSegundos = duracao;
+        if (duracao <= 0 || duracao >= 3600 ) {
+            System.out.println("Musica com duração inválida, deve ser maior que 0 e menor que 3600 segundos");
+        } else {
+            this.duracaoSegundos = duracao;
+        }
     }
 
     public String getGenero() {
