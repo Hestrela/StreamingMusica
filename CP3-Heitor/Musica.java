@@ -27,7 +27,16 @@ public class Musica {
     }
 
     public void setArtista(String artista) {
-        this.artista = artista;
+        if (artista == null) {
+            System.out.println("Artista não deve ser nulo");      
+        } else {
+            String artistaCorreto = artista.trim();
+            if (artistaCorreto.isEmpty()) {
+                System.out.println("Artista não deve ser vazio");
+            } else {
+                this.artista = artistaCorreto;
+            }
+        }
     }
 
     public int getDuracao() {
