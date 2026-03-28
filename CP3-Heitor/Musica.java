@@ -46,6 +46,27 @@ public class Musica {
         this.genero = genero;
     }
 
+    public Musica() {
+        this.titulo = "Desconhecido";
+        this.artista = "Desconhecido";
+        this.duracaoSegundos = 1;
+        this.genero = "Pop";
+    }
 
+    public Musica(String titulo, String artista) {
+        this(titulo, artista, 1, "Pop");
+    }
+
+
+    public Musica(String titulo, String artista, int duracao, String genero) {
+        setTitulo(titulo);
+        setArtista(artista);
+        setDuracao(duracao);
+        setGenero(genero);
+    }
+
+    
+
+    
 
 }
