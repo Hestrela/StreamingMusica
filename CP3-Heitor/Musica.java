@@ -56,7 +56,25 @@ public class Musica {
     }
 
     public void setGenero(String genero) {
-        this.genero = genero;
+        String[] generosMusicais = {"Pop", "Rock", "Jazz", "Eletrônica", "Hip-Hop", "Clássica"};
+        boolean generoEncontrado = false;
+
+        if (genero == null) {
+            System.out.println("Genero não pode ser nulo");
+        } else {
+            for(int contador = 0; contador < generosMusicais.length; contador++) {
+                String generoCorreto = genero.toLowerCase();
+                if (generosMusicais[contador].equalsIgnoreCase(genero)) {
+                    this.genero = generoCorreto;
+                    generoEncontrado = true;
+                    break;
+                }
+            }
+            if (generoEncontrado == false) {
+                System.out.println("Genero inválido");
+            }
+        }
+        
     }
 
     public Musica() {
