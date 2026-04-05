@@ -40,4 +40,13 @@ public class Playlist {
         }
     }
 
+    public Playlist() {
+        this.nome = "Desconhecido";
+    }
+
+    public Playlist(String nome) {
+        setNome(nome);
+        musicas = new ArrayList<>();
+    }
+
 }
