@@ -3,14 +3,12 @@ import java.util.Scanner;
 
 public class StreamingMusica {
 
-    static ArrayList<Musica> acervo = new ArrayList<>();
-    static Usuario usuarioAtual = new Usuario();
     static Scanner scanner = new Scanner(System.in);
-    static final String[] GENEROS_VALIDOS = {"Pop", "Rock", "Jazz", "Eletrônica", "Hip-Hop", "Clássica"};
 
     public static void main(String[] args) {
-        usuarioAtual.nome = "Aluno";
-        usuarioAtual.playlists = new ArrayList<>();
+        Usuario usuario = new Usuario();
+        Playlist acervo = new Playlist();
+        
 
         int opcao;
         do {
@@ -46,7 +44,7 @@ public class StreamingMusica {
     static void processarOpcao(int opcao) {
         switch (opcao) {
             case 1:
-                cadastrarMusica();
+                ;
                 break;
             case 2:
                 listarMusicas(acervo, "MÚSICAS CADASTRADAS NO ACERVO");
@@ -71,55 +69,32 @@ public class StreamingMusica {
     }
 
     static void cadastrarMusica() {
-        System.out.println("\n--- CADASTRAR MÚSICA ---");
+        try {
+            System.out.println("\n--- CADASTRAR MÚSICA ---");
 
-        System.out.print("Título: ");
-        String titulo = scanner.nextLine().trim();
-        if (titulo.isEmpty()) {
-            System.out.println("Erro: O título não pode ser vazio!");
-            return;
+            System.out.print("Título: ");
+            String titulo = scanner.nextLine().trim();
+
+            System.out.print("Artista: ");
+            String artista = scanner.nextLine().trim();
+            
+
+            System.out.print("Duração (segundos): ");
+            int duracao = lerOpcao();
+            
+
+            System.out.print("Gênero (Pop, Rock, Jazz, Eletrônica, Hip-Hop, Clássica): ");
+            String genero = scanner.nextLine().trim();
+
+            Musica novaMusica = new Musica(titulo, artista, duracao, genero);
+            acervo.add(novaMusica);
+
+            System.out.println("Música cadastrada com sucesso!");
+
+        } catch (IllegalArgumentException erro) {
+            System.out.println("\nErro ao cadastrar: " + erro.getMessage());
+            System.out.println("Por favor, tente cadastrar novamente.");
         }
-
-        System.out.print("Artista: ");
-        String artista = scanner.nextLine().trim();
-        if (artista.isEmpty()) {
-            System.out.println("Erro: O artista não pode ser vazio!");
-            return;
-        }
-
-        System.out.print("Duração (segundos): ");
-        int duracao = lerOpcao();
-        if (duracao <= 0) {
-            System.out.println("Erro: A duração deve ser maior que 0!");
-            return;
-        }
-
-        System.out.print("Gênero (Pop, Rock, Jazz, Eletrônica, Hip-Hop, Clássica): ");
-        String genero = scanner.nextLine().trim();
-        String generoFormatado = validarGenero(genero);
-        if (generoFormatado == null) {
-            System.out.println("Erro: Gênero inválido!");
-            return;
-        }
-
-        Musica novaMusica = new Musica();
-        novaMusica.titulo = titulo;
-        novaMusica.artista = artista;
-        novaMusica.duracao = duracao;
-        novaMusica.genero = generoFormatado;
-        
-        acervo.add(novaMusica);
-
-        System.out.println("Música cadastrada com sucesso!");
-    }
-
-    static String validarGenero(String g) {
-        for (int i = 0; i < GENEROS_VALIDOS.length; i++) {
-            if (GENEROS_VALIDOS[i].equalsIgnoreCase(g)) {
-                return GENEROS_VALIDOS[i];
-            }
-        }
-        return null;
     }
 
     static void listarMusicas(ArrayList<Musica> lista, String tituloCabecalho) {
