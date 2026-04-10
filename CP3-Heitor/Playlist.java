@@ -9,24 +9,22 @@ public class Playlist {
 
     public void setNome(String nome) {
         if (nome == null) {
-            System.out.println("O nome da playlist não deve ser nulo!");
+            throw new IllegalArgumentException("O nome não pode ser nulo!");
         } else {
             String nomeCorreto = nome.trim();
             if (nomeCorreto.isEmpty()) {
-                System.out.println("O nome não deve ser vazio!");
+                throw new IllegalArgumentException("O nome da playlist não deve ser vazio!");
             } else {
                 this.nome = nomeCorreto;
             }
         }
     }
 
-    public ArrayList<Musica> getMusicas() {
-        return musicas;
-    }
+    public ArrayList<Musica> getMusicas() { return musicas; }
 
     public void adicionarMusicas(Musica musica) {
         if (musica == null) {
-            System.out.println("A música não deve ser nula!");
+            throw new IllegalArgumentException("A música não deve ser nula!");
         } else {
             musicas.add(musica);
         }
@@ -34,19 +32,42 @@ public class Playlist {
 
     public void removerMusica(int indice) {
         if (indice >= musicas.size() || indice < 0) {
-            System.out.println("O índice não deve ser negativo ou maior que o tamanho da lista de músicas");
+            throw new IllegalArgumentException("O índice não deve ser negativo ou maior que o tamanho da lista de músicas");
         } else {       
                 musicas.remove(indice);         
         }
     }
 
+    public void listarMusicas() {
+        for (int indice = 0; indice < musicas.size(); indice++) {
+            Musica m = musicas.get(indice);         
+            System.out.printf("%d. Nome: %s | Artista: %s | Duração: %d segundos | Gênero: %s%n"
+                , (indice + 1), m.getTitulo(), m.getArtista(), m.getDuracao(), m.getGenero()
+            );
+        }
+    }
+
+    public int getDuracaoTotal() {
+        int duracaoTotal = 0;
+        
+        for (int indice = 0; indice < musicas.size(); indice++) {
+            Musica m = musicas.get(indice);
+            duracaoTotal += m.getDuracao();
+        }
+        return duracaoTotal;
+    }
+
+    public int getQuantidadeMusicas() {
+        return musicas.size();
+    }
+
     public Playlist() {
-        this.nome = "Desconhecido";
+        this("Desconhecido");
     }
 
     public Playlist(String nome) {
         setNome(nome);
-        musicas = new ArrayList<>();
+        this.musicas = new ArrayList<>();
     }
 
 }
