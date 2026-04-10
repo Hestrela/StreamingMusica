@@ -11,11 +11,11 @@ public class Musica {
 
     public void setTitulo(String titulo) {
         if (titulo == null) {
-            System.out.println("Título não deve ser nulo");      
+            throw new IllegalArgumentException("Título não deve ser nulo");      
         } else {
             String tituloCorreto = titulo.trim();
             if (tituloCorreto.isEmpty()) {
-                System.out.println("Título não deve ser vazio");
+                throw new IllegalArgumentException("Título não deve ser vazio");
             } else {
                 this.titulo = tituloCorreto;
             }
@@ -28,11 +28,11 @@ public class Musica {
 
     public void setArtista(String artista) {
         if (artista == null) {
-            System.out.println("Artista não deve ser nulo");      
+            throw new IllegalArgumentException("Artista não deve ser nulo");      
         } else {
             String artistaCorreto = artista.trim();
             if (artistaCorreto.isEmpty()) {
-                System.out.println("Artista não deve ser vazio");
+                throw new IllegalArgumentException("Artista não deve ser vazio");
             } else {
                 this.artista = artistaCorreto;
             }
@@ -45,7 +45,7 @@ public class Musica {
 
     public void setDuracao(int duracao) {
         if (duracao <= 0 || duracao >= 3600 ) {
-            System.out.println("Musica com duração inválida, deve ser maior que 0 e menor que 3600 segundos");
+            throw new IllegalArgumentException("Musica com duração inválida, deve ser maior que 0 e menor que 3600 segundos");
         } else {
             this.duracaoSegundos = duracao;
         }
@@ -60,7 +60,7 @@ public class Musica {
         boolean generoEncontrado = false;
 
         if (genero == null) {
-            System.out.println("Genero não pode ser nulo");
+            throw new IllegalArgumentException("Genero não pode ser nulo");
         } else {
             for(int contador = 0; contador < generosMusicais.length; contador++) {
                 String generoCorreto = genero.toLowerCase();
@@ -71,7 +71,7 @@ public class Musica {
                 }
             }
             if (generoEncontrado == false) {
-                System.out.println("Genero inválido");
+                throw new IllegalArgumentException("Genero inválido");
             }
         }
         
