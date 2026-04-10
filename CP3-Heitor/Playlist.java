@@ -22,7 +22,7 @@ public class Playlist {
 
     public ArrayList<Musica> getMusicas() { return musicas; }
 
-    public void adicionarMusicas(Musica musica) {
+    public void adicionarMusica(Musica musica) {
         if (musica == null) {
             throw new IllegalArgumentException("A música não deve ser nula!");
         } else {
