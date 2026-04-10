@@ -3,11 +3,13 @@ import java.util.Scanner;
 
 public class StreamingMusica {
 
+    static ArrayList<Musica> acervo = new ArrayList<>(); 
+    static Usuario usuarioAtual = new Usuario("Aluno"); 
     static Scanner scanner = new Scanner(System.in);
+    static final String[] GENEROS_VALIDOS = {"Pop", "Rock", "Jazz", "Eletrônica", "Hip-Hop", "Clássica"};
 
     public static void main(String[] args) {
-        Usuario usuario = new Usuario();
-        Playlist acervo = new Playlist();
+        
         
 
         int opcao;
@@ -26,9 +28,10 @@ public class StreamingMusica {
         System.out.println("1. Cadastrar música");
         System.out.println("2. Listar todas as músicas");
         System.out.println("3. Buscar música");
-        System.out.println("4. Criar playlist");
-        System.out.println("5. Gerenciar playlists");
-        System.out.println("6. Exibir estatísticas");
+        System.out.println("4. Editar música (NOVO)"); // Requisito do CP3
+        System.out.println("5. Criar playlist");
+        System.out.println("6. Gerenciar playlists");
+        System.out.println("7. Exibir estatísticas");
         System.out.println("0. Sair");
         System.out.print("Escolha uma opção: ");
     }
@@ -43,28 +46,15 @@ public class StreamingMusica {
 
     static void processarOpcao(int opcao) {
         switch (opcao) {
-            case 1:
-                ;
-                break;
-            case 2:
-                listarMusicas(acervo, "MÚSICAS CADASTRADAS NO ACERVO");
-                break;
-            case 3:
-                menuBuscarMusica();
-                break;
-            case 4:
-                criarPlaylist();
-                break;
-            case 5:
-                gerenciarPlaylists();
-                break;
-            case 6:
-                exibirEstatisticas();
-                break;
-            case 0:
-                break;
-            default:
-                System.out.println("Opção Inválida");
+            case 1: cadastrarMusica(); break;
+            case 2: listarMusicas(acervo, "MÚSICAS CADASTRADAS NO ACERVO"); break;
+            case 3: menuBuscarMusica(); break;
+            case 4: editarMusica(); break;
+            case 5: criarPlaylist(); break;
+            case 6: gerenciarPlaylists(); break;
+            case 7: exibirEstatisticas(); break;
+            case 0: break;
+            default: System.out.println("Opção Inválida");
         }
     }
 
@@ -97,6 +87,60 @@ public class StreamingMusica {
         }
     }
 
+    static void editarMusica() {
+        System.out.println("\n--- EDITAR MÚSICA ---");
+        if (acervo.isEmpty()) {
+            System.out.println("O acervo está vazio.");
+            return;
+        }
+
+        listarMusicas(acervo, "ESCOLHA A MÚSICA PARA EDITAR");
+        System.out.print("Digite o número da música: ");
+        int indice = lerOpcao() - 1;
+
+        if (indice < 0 || indice >= acervo.size()) {
+            System.out.println("Música não encontrada!");
+            return;
+        }
+
+        Musica m = acervo.get(indice);
+        
+        System.out.println("Editando: " + m.getTitulo() + " - " + m.getArtista());
+        System.out.println("1. Editar Título");
+        System.out.println("2. Editar Artista");
+        System.out.println("3. Editar Duração");
+        System.out.println("4. Editar Gênero");
+        System.out.print("O que deseja editar? ");
+        int op = lerOpcao();
+
+        try {
+            switch(op) {
+                case 1:
+                    System.out.print("Novo título: ");
+                    m.setTitulo(scanner.nextLine());
+                    break;
+                case 2:
+                    System.out.print("Novo artista: ");
+                    m.setArtista(scanner.nextLine());
+                    break;
+                case 3:
+                    System.out.print("Nova duração (segundos): ");
+                    m.setDuracao(lerOpcao());
+                    break;
+                case 4:
+                    System.out.print("Novo gênero: ");
+                    m.setGenero(scanner.nextLine());
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+                    return;
+            }
+            System.out.println("Música atualizada com sucesso!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Erro ao editar: " + e.getMessage());
+        }
+    }
+
     static void listarMusicas(ArrayList<Musica> lista, String tituloCabecalho) {
         System.out.println("\n=== " + tituloCabecalho + " ===");
 
@@ -105,12 +149,11 @@ public class StreamingMusica {
             return;
         }
 
-        for (int i = 0; i < lista.size(); i++) {
-            Musica m = lista.get(i);
-            System.out.println((i + 1) + ". Título: " + m.titulo +
-                    " | Artista: " + m.artista +
-                    " | Duração: " + formatarDuracao(m.duracao) +
-                    " | Gênero: " + m.genero);
+        for (int indice = 0; indice < lista.size(); indice++) {
+             System.out.printf("%d. Nome: %s | Artista: %s | Duração: %d segundos | Gênero: %s%n"
+                , (indice + 1), lista.get(indice).getTitulo(), lista.get(indice).getArtista(), 
+                lista.get(indice).getDuracao(), lista.get(indice).getGenero()
+            );
         }
         System.out.println("Total: " + lista.size() + " música(s)");
     }
@@ -147,17 +190,17 @@ public class StreamingMusica {
         
         for (int i = 0; i < acervo.size(); i++) {
             Musica m = acervo.get(i);
-            boolean match = false;
+            boolean achou = false;
             
-            if (tipo.equals("titulo") && m.titulo.toLowerCase().contains(termo)) {
-                match = true;
-            } else if (tipo.equals("artista") && m.artista.toLowerCase().contains(termo)) {
-                match = true;
-            } else if (tipo.equals("genero") && m.genero.toLowerCase().contains(termo)) {
-                match = true;
+            if (tipo.equals("titulo") && m.getTitulo().toLowerCase().contains(termo)) {
+                achou = true;
+            } else if (tipo.equals("artista") && m.getArtista().toLowerCase().contains(termo)) {
+                achou = true;
+            } else if (tipo.equals("genero") && m.getGenero().toLowerCase().contains(termo)) {
+                achou = true;
             }
             
-            if (match) {
+            if (achou) {
                 resultados.add(m);
             }
         }
@@ -168,19 +211,14 @@ public class StreamingMusica {
     static void criarPlaylist() {
         System.out.println("\n--- CRIAR PLAYLIST ---");
         System.out.print("Nome da playlist: ");
-        String nome = scanner.nextLine().trim();
+        String nome = scanner.nextLine();
         
-        if (nome.isEmpty()) {
-            System.out.println("Erro: O nome não pode ser vazio!");
-            return;
+        try {
+            usuarioAtual.criarPlaylist(nome);
+            System.out.println("Playlist '" + nome + "' criada com sucesso!");
+        } catch (IllegalArgumentException erro) {
+            System.out.println("Erro: " + erro.getMessage());
         }
-        
-        Playlist novaPlaylist = new Playlist();
-        novaPlaylist.nome = nome;
-        novaPlaylist.musicas = new ArrayList<>();
-        
-        usuarioAtual.playlists.add(novaPlaylist);
-        System.out.println("Playlist '" + nome + "' criada com sucesso para o usuário " + usuarioAtual.nome + "!");
     }
 
     static void gerenciarPlaylists() {
@@ -197,54 +235,31 @@ public class StreamingMusica {
             opcao = lerOpcao();
             
             switch (opcao) {
-                case 1:
-                    listarPlaylists();
+                case 1: 
+                    System.out.println("\n--- MINHAS PLAYLISTS ---");
+                    usuarioAtual.listarPlaylists(); 
                     break;
-                case 2:
-                    adicionarMusicaPlaylist();
-                    break;
-                case 3:
-                    removerMusicaPlaylist();
-                    break;
-                case 4:
-                    exibirDetalhesPlaylist();
-                    break;
-                case 0:
-                    break;
-                default:
-                    System.out.println("Opção Inválida");
+                case 2: adicionarMusicaPlaylist(); break;
+                case 3: removerMusicaPlaylist(); break;
+                case 4: exibirDetalhesPlaylist(); break;
+                case 0: break;
+                default: System.out.println("Opção Inválida");
             }
         } while (opcao != 0);
     }
 
-    static void listarPlaylists() {
-        System.out.println("\n--- MINHAS PLAYLISTS ---");
-        ArrayList<Playlist> playlists = usuarioAtual.playlists;
-        if (playlists.isEmpty()) {
-            System.out.println("Você ainda não tem playlists.");
-            return;
-        }
-        
-        for (int i = 0; i < playlists.size(); i++) {
-            System.out.println((i + 1) + ". " + playlists.get(i).nome + 
-                               " (" + playlists.get(i).musicas.size() + " músicas)");
-        }
-    }
+    
 
     static Playlist selecionarPlaylist() {
-        listarPlaylists();
-        ArrayList<Playlist> playlists = usuarioAtual.playlists;
-        if (playlists.isEmpty()) {
-            return null;
-        }
-        
+        System.out.println("\n--- MINHAS PLAYLISTS ---");
+        usuarioAtual.listarPlaylists();
         System.out.print("Escolha o número da playlist: ");
         int indice = lerOpcao() - 1;
         
-        if (indice >= 0 && indice < playlists.size()) {
-            return playlists.get(indice);
-        } else {
-            System.out.println("Playlist não encontrada.");
+        try {
+            return usuarioAtual.getPlaylist(indice);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
             return null;
         }
     }
@@ -260,8 +275,12 @@ public class StreamingMusica {
         int indiceMusica = lerOpcao() - 1;
         
         if (indiceMusica >= 0 && indiceMusica < acervo.size()) {
-            p.musicas.add(acervo.get(indiceMusica));
-            System.out.println("Música adicionada à playlist '" + p.nome + "'!");
+            try {
+                p.adicionarMusica(acervo.get(indiceMusica));
+                System.out.println("Música adicionada à playlist '" + p.getNome() + "'!");
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
         } else {
             System.out.println("Música não encontrada.");
         }
@@ -271,17 +290,17 @@ public class StreamingMusica {
         Playlist p = selecionarPlaylist();
         if (p == null) return;
         
-        listarMusicas(p.musicas, "MÚSICAS DA PLAYLIST " + p.nome.toUpperCase());
-        if (p.musicas.isEmpty()) return;
+        System.out.println("\n=== MÚSICAS DA PLAYLIST: " + p.getNome() + " ===");
+        p.listarMusicas();
         
         System.out.print("Escolha o número da música para remover: ");
         int indiceMusica = lerOpcao() - 1;
         
-        if (indiceMusica >= 0 && indiceMusica < p.musicas.size()) {
-            p.musicas.remove(indiceMusica);
+        try {
+            p.removerMusica(indiceMusica);
             System.out.println("Música removida com sucesso!");
-        } else {
-            System.out.println("Música não encontrada na playlist.");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -289,32 +308,36 @@ public class StreamingMusica {
         Playlist p = selecionarPlaylist();
         if (p == null) return;
         
-        listarMusicas(p.musicas, "DETALHES DA PLAYLIST: " + p.nome.toUpperCase());
+        System.out.println("\n=== DETALHES DA PLAYLIST: " + p.getNome().toUpperCase() + " ===");
+        p.listarMusicas();
+        
+        int totalSegundos = p.getDuracaoTotal();
+        int min = totalSegundos / 60;
+        int seg = totalSegundos % 60;
+        System.out.println("\nDuração total: " + String.format("%d:%02d", min, seg));
+        System.out.println("Quantidade de músicas: " + p.getQuantidadeMusicas());
     }
 
     static void exibirEstatisticas() {
         System.out.println("\n=== ESTATÍSTICAS DO SISTEMA ===");
         int total = acervo.size();
         System.out.println("Total de músicas no acervo: " + total);
-        System.out.println("Total de playlists criadas: " + usuarioAtual.playlists.size());
 
-        if (total == 0) {
-            return;
-        }
+        if (total == 0) return;
 
         int somaDuracao = 0;
         for (int i = 0; i < acervo.size(); i++) {
-            somaDuracao += acervo.get(i).duracao;
+            somaDuracao += acervo.get(i).getDuracao();
         }
         
-        System.out.println("Duração total do acervo: " + formatarDuracao(somaDuracao));
-        System.out.println("Duração média: " + formatarDuracao(somaDuracao / total));
+        int minTotal = somaDuracao / 60;
+        int segTotal = somaDuracao % 60;
+        System.out.println("Duração total do acervo: " + String.format("%d:%02d", minTotal, segTotal));
 
         int[] contadores = new int[GENEROS_VALIDOS.length];
 
         for (int i = 0; i < acervo.size(); i++) {
-            String generoDaMusica = acervo.get(i).genero;
-            
+            String generoDaMusica = acervo.get(i).getGenero();
             for (int j = 0; j < GENEROS_VALIDOS.length; j++) {
                 if (generoDaMusica.equalsIgnoreCase(GENEROS_VALIDOS[j])) {
                     contadores[j]++;
@@ -325,7 +348,6 @@ public class StreamingMusica {
 
         int maximo = 0;
         String generoMaisCadastrado = "";
-        
         for (int i = 0; i < contadores.length; i++) {
             if (contadores[i] > maximo) {
                 maximo = contadores[i];
@@ -336,11 +358,5 @@ public class StreamingMusica {
         if (maximo > 0) {
             System.out.println("Gênero mais cadastrado: " + generoMaisCadastrado + " (" + maximo + " músicas)");
         }
-    }
-
-    static String formatarDuracao(int segundos) {
-        int min = segundos / 60;
-        int seg = segundos % 60;
-        return String.format("%d:%02d", min, seg);
     }
 }
