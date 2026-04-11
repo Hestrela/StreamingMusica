@@ -3,15 +3,14 @@ import java.util.Scanner;
 
 public class StreamingMusica {
 
+    // Atributos que representam as classes  
     static ArrayList<Musica> acervo = new ArrayList<>(); 
     static Usuario usuarioAtual = new Usuario("Aluno"); 
     static Scanner scanner = new Scanner(System.in);
     static final String[] GENEROS_VALIDOS = {"Pop", "Rock", "Jazz", "Eletrônica", "Hip-Hop", "Clássica"};
 
     public static void main(String[] args) {
-        
-        
-
+        // Laço de repetição que executa a função de exibir menu, ler e processar a opção do usuário 
         int opcao;
         do {
             exibirMenu();
@@ -37,6 +36,7 @@ public class StreamingMusica {
     }
 
     static int lerOpcao() {
+        // Tenta transformar a opção do usuário em integer e retorna -1 caso haja erro de formato
         try {
             return Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
@@ -67,11 +67,9 @@ public class StreamingMusica {
 
             System.out.print("Artista: ");
             String artista = scanner.nextLine().trim();
-            
 
             System.out.print("Duração (segundos): ");
             int duracao = lerOpcao();
-            
 
             System.out.print("Gênero (Pop, Rock, Jazz, Eletrônica, Hip-Hop, Clássica): ");
             String genero = scanner.nextLine().trim();
@@ -89,6 +87,7 @@ public class StreamingMusica {
 
     static void editarMusica() {
         System.out.println("\n--- EDITAR MÚSICA ---");
+        // Valida se a lista acervo está vazia
         if (acervo.isEmpty()) {
             System.out.println("O acervo está vazio.");
             return;
@@ -98,11 +97,13 @@ public class StreamingMusica {
         System.out.print("Digite o número da música: ");
         int indice = lerOpcao() - 1;
 
+        // Valida se o índice é menor que zero ou maior ou igual ao tamanho do array
         if (indice < 0 || indice >= acervo.size()) {
             System.out.println("Música não encontrada!");
             return;
         }
 
+        // Busco a música desejada pelo índice
         Musica m = acervo.get(indice);
         
         System.out.println("Editando: " + m.getTitulo() + " - " + m.getArtista());
@@ -144,11 +145,13 @@ public class StreamingMusica {
     static void listarMusicas(ArrayList<Musica> lista, String tituloCabecalho) {
         System.out.println("\n=== " + tituloCabecalho + " ===");
 
+        // Valida se a lista das músicas está vazia
         if (lista.isEmpty()) {
             System.out.println("Nenhuma música encontrada.");
             return;
         }
 
+        // Percorre a lista e imprime as informações de cada música
         for (int indice = 0; indice < lista.size(); indice++) {
              System.out.printf("%d. Nome: %s | Artista: %s | Duração: %d segundos | Gênero: %s%n"
                 , (indice + 1), lista.get(indice).getTitulo(), lista.get(indice).getArtista(), 
@@ -188,8 +191,11 @@ public class StreamingMusica {
         
         ArrayList<Musica> resultados = new ArrayList<>();
         
+        // Percorre a lista de músicas e verifica se o termo digitado pelo usários se encontra nas informações da música
         for (int i = 0; i < acervo.size(); i++) {
             Musica m = acervo.get(i);
+
+            // Flag de validação
             boolean achou = false;
             
             if (tipo.equals("titulo") && m.getTitulo().toLowerCase().contains(termo)) {
@@ -213,6 +219,7 @@ public class StreamingMusica {
         System.out.print("Nome da playlist: ");
         String nome = scanner.nextLine();
         
+        // Tenta executar a função criarPlaylist da classe Usuario
         try {
             usuarioAtual.criarPlaylist(nome);
             System.out.println("Playlist '" + nome + "' criada com sucesso!");
@@ -256,6 +263,7 @@ public class StreamingMusica {
         System.out.print("Escolha o número da playlist: ");
         int indice = lerOpcao() - 1;
         
+        // Tenta retornar a playlist desejada, caso contrário, muda o valor para null e o programa volta ao menu
         try {
             return usuarioAtual.getPlaylist(indice);
         } catch (IllegalArgumentException e) {
@@ -275,6 +283,7 @@ public class StreamingMusica {
         int indiceMusica = lerOpcao() - 1;
         
         if (indiceMusica >= 0 && indiceMusica < acervo.size()) {
+            // Tenta adicionar a música na playlist desejada utilizando a lista acervo 
             try {
                 p.adicionarMusica(acervo.get(indiceMusica));
                 System.out.println("Música adicionada à playlist '" + p.getNome() + "'!");
@@ -306,6 +315,7 @@ public class StreamingMusica {
 
     static void exibirDetalhesPlaylist() {
         Playlist p = selecionarPlaylist();
+        // Se a playlist for nula, retorna ao menu
         if (p == null) return;
         
         System.out.println("\n=== DETALHES DA PLAYLIST: " + p.getNome().toUpperCase() + " ===");
@@ -323,9 +333,12 @@ public class StreamingMusica {
         int total = acervo.size();
         System.out.println("Total de músicas no acervo: " + total);
 
+        // Se a playlist for nula, retorna ao menu
         if (total == 0) return;
 
         int somaDuracao = 0;
+
+        // Percorre a lista acervo e busca a duração de cada música
         for (int i = 0; i < acervo.size(); i++) {
             somaDuracao += acervo.get(i).getDuracao();
         }
@@ -336,9 +349,11 @@ public class StreamingMusica {
 
         int[] contadores = new int[GENEROS_VALIDOS.length];
 
+        //Percorre a lista acervo em busca do genêro da música
         for (int i = 0; i < acervo.size(); i++) {
             String generoDaMusica = acervo.get(i).getGenero();
             for (int j = 0; j < GENEROS_VALIDOS.length; j++) {
+                // Valida se o genêro da música está contida na lista de genêros válidos
                 if (generoDaMusica.equalsIgnoreCase(GENEROS_VALIDOS[j])) {
                     contadores[j]++;
                     break;
@@ -349,6 +364,7 @@ public class StreamingMusica {
         int maximo = 0;
         String generoMaisCadastrado = "";
         for (int i = 0; i < contadores.length; i++) {
+            // Valida se o laço e menor que o tamanho da lista de genẽros válidos para calcular o genêro mais cadastrado
             if (contadores[i] > maximo) {
                 maximo = contadores[i];
                 generoMaisCadastrado = GENEROS_VALIDOS[i];
