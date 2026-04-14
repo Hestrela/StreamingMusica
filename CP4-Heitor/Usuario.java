@@ -2,58 +2,61 @@ import java.util.ArrayList;
 
 // Classe que representa o usuário e gerencia playlists
 public class Usuario {
-
-    private String nome;
-    private ArrayList<Playlist> playlists;
-
-    public String getNome() { return nome; }
+    protected String nome;
+    protected String email;
+    protected ArrayList<Playlist> playlists;
+    protected ArrayList<Musica> historicoReproducao;
+    
+    public String getNome() {
+        return nome;
+    }
 
     public void setNome(String nome) {
-        // Valida se o valor do nome do usuário é nulo
-        if (nome == null) {
-            throw new IllegalArgumentException("O nome do usuário não deve ser nulo!");
-        } else {
-            // Valida se o nome do usuário não é vazio
-            String usuarioCorreto = nome.trim();
-            if (usuarioCorreto.isEmpty()) {
-                throw new IllegalArgumentException("O nome do usuário não deve ser vazio!");
-            } else {
-                this.nome = usuarioCorreto;
-            }
-        }
+        this.nome = nome;
     }
 
-    public Playlist getPlaylist(int indice) {
-        // Valida se o índice é menor que zero ou maior ou igual que o tamanho do array de playlists
-        if (indice < 0 ||indice >= playlists.size()) {
-            throw new IllegalArgumentException("O índice não deve ser menor que zero ou maior que a quantidade de playlists!");
-        } else {
-            return playlists.get(indice);
-        }
+    public String getEmail() {
+        return email;
     }
 
-    public void criarPlaylist(String nome) {
-        Playlist novaPlaylist = new Playlist(nome);
-        playlists.add(novaPlaylist);
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void listarPlaylists() {
-        // Percorre a lista de playlist e exibe informações de cada
-        for (int indice = 0; indice < playlists.size(); indice++) {
-            Playlist p = playlists.get(indice);
-            System.out.printf("%d. Nome: %s | Quantidade de músicas: %d | Total de tempo: %d%n", (indice + 1), p.getNome(), p.getQuantidadeMusicas(), p.getDuracaoTotal());
-        }
+    public ArrayList<Playlist> getPlaylists() {
+        return playlists;
     }
 
-    // Construtor padrão 
-    public Usuario() {
-        this("Desconhecido");
+    public void setPlaylists(ArrayList<Playlist> playlists) {
+        this.playlists = playlists;
     }
 
-    // Construtor parametrizado
-    public Usuario(String nome) {
+    public ArrayList<Musica> getHistoricoReproducao() {
+        return historicoReproducao;
+    }
+
+    public void setHistoricoReproducao(ArrayList<Musica> historicoReproducao) {
+        this.historicoReproducao = historicoReproducao;
+    }
+
+    public Usuario(String nome, String email) {
         setNome(nome);
+        setEmail(email);
         this.playlists = new ArrayList<>();
+        this.historicoReproducao = new ArrayList<>();
     }
-
+    
+    public void reproduzirMusica(Musica musica) {
+        System.out.println("🎵 Reproduzindo: " + musica.getTitulo());
+        historicoReproducao.add(musica);
+    }
+    
+    public void exibirHistorico() {
+        System.out.println("\n--- HISTÓRICO DE REPRODUÇÃO ---");
+        for (Musica m : historicoReproducao) {
+            m.exibir();
+        }
+    }
+    
+    // Getters e Setters...
 }
