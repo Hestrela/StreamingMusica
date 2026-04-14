@@ -88,6 +88,10 @@ public class Musica {
         
     }
 
+    public void exibir() {
+        System.out.printf("Título: %s | Artista: %s | Duração: %d | Gênero: %s%n", getTitulo(), getArtista(), getDuracao(), getGenero());
+    }
+
     public Musica() {
         // Construtor padrão
         this.titulo = "Desconhecido";
