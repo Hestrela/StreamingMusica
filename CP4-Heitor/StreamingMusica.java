@@ -100,10 +100,61 @@ public class StreamingMusica {
     }
 
     static void processarOpcao(int opcao) {
-        switch (opcao) {
-            case 1: usuarioAtual.reproduzirMusica(null);; break;
-            case 2: 
-        }
+        if (usuarioAtual instanceof UsuarioPremium) {
+            switch (opcao) {
+                case 1: {
+                    listarMusicas(acervo, "MÚSICAS");
+                    System.out.print("Selecione a música desejada: ");
+                    int musicaDesejada = lerOpcao() - 1;
+                    if (musicaDesejada < acervo.size() && musicaDesejada >= 0) {
+                        Musica m = acervo.get(musicaDesejada);
+                        usuarioAtual.reproduzirMusica(m); 
+                        break; 
+                    } else {
+                        System.out.println("Opção inválida");
+                        break;
+                    }
+                }              
+                case 2: usuarioAtual.exibirHistorico(); break;
+                case 3:
+                System.out.print("Escolha o nome da playlist: ");
+                String nomePlaylist = scanner.nextLine();
+                usuarioAtual.criarPlaylist(nomePlaylist);
+                break;
+                case 4:
+                    listarMusicas(acervo, "MÚSICAS");
+                    System.out.print("Selecione a música desejada: ");
+                    int musicaDesejada = lerOpcao() - 1;
+                    Musica m = acervo.get(musicaDesejada);
+                    ((UsuarioPremium)usuarioAtual).baixarMusica(m); 
+                    break;
+                case 5: ((UsuarioPremium)usuarioAtual).listarMusicasBaixadas(); break;
+                default: break;
+            }
+        } else {
+            switch(opcao) {
+                case 1: 
+                    listarMusicas(acervo, "MÚSICAS");
+                    System.out.print("Selecione a música desejada: ");
+                    int musicaDesejada = lerOpcao() - 1;
+                    if (musicaDesejada < acervo.size() && musicaDesejada >= 0) {
+                        Musica m = acervo.get(musicaDesejada);
+                        usuarioAtual.reproduzirMusica(m); 
+                        break; 
+                    } else {
+                        System.out.println("Opção inválida");
+                        break;
+                    }              
+                case 2: usuarioAtual.exibirHistorico(); break;
+                case 3:
+                System.out.print("Escolha o nome da playlist: ");
+                String nomePlaylist = scanner.nextLine();
+                usuarioAtual.criarPlaylist(nomePlaylist);
+                break;
+                case 4: fazerLogin();  break;
+                default: break;
+            }
+        } 
     }
 
     /* static void cadastrarMusica() {
@@ -292,8 +343,15 @@ public class StreamingMusica {
             switch (opcao) {
                 case 1: 
                     System.out.println("\n--- MINHAS PLAYLISTS ---");
-                    usuarioAtual.getPlaylists(); 
-                    break;
+                    try {
+                        ArrayList<Playlist> listas = usuarioAtual.getPlaylists();
+                        for (int i = 0; i < listas.size(); i++) {
+                            System.out.printf("%d. %s%n", i + 1, listas.get(i).getNome());
+                        }                   
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                }
+                break;                   
                 case 2: adicionarMusicaPlaylist(); break;
                 case 3: removerMusicaPlaylist(); break;
                 case 4: exibirDetalhesPlaylist(); break;
@@ -307,13 +365,19 @@ public class StreamingMusica {
 
     static Playlist selecionarPlaylist() {
         System.out.println("\n--- MINHAS PLAYLISTS ---");
-        usuarioAtual.getPlaylists();
-        System.out.print("Escolha o número da playlist: ");
-        int indice = lerOpcao() - 1;
-        
-        // Tenta retornar a playlist desejada, caso contrário, muda o valor para null e o programa volta ao menu
         try {
-            return usuarioAtual.getPlaylists(indice);
+            ArrayList<Playlist> listas = usuarioAtual.getPlaylists();
+            for (int i = 0; i < listas.size(); i++) {
+                System.out.printf("%d. %s%n", i + 1, listas.get(i).getNome());
+            }
+            System.out.print("Escolha o número da playlist: ");
+            int escolha = lerOpcao() - 1;
+            if (escolha >= 0 && escolha < listas.size()) {
+                return listas.get(escolha);
+            } else {
+                System.out.println("Opção inválida.");
+                return null;
+            }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return null;
