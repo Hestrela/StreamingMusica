@@ -350,8 +350,8 @@ public class StreamingMusica {
                         }                   
                     } catch (IllegalArgumentException e) {
                         System.out.println(e.getMessage());
-                }
-                break;                   
+                    }
+                    break;                   
                 case 2: adicionarMusicaPlaylist(); break;
                 case 3: removerMusicaPlaylist(); break;
                 case 4: exibirDetalhesPlaylist(); break;
