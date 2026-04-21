@@ -44,7 +44,7 @@ public class StreamingMusica {
         System.out.println("\n=== BEM-VINDO AO STREAMING ===");
         System.out.print("Digite seu nome: ");
         String nomeUsuarioAtual = scanner.nextLine();
-        System.out.println("Digite seu email: ");
+        System.out.print("Digite seu email: ");
         String emailUsuarioAtual = scanner.nextLine();
         System.out.println("Escolha seu tipo de conta: ");
         System.out.println("1. Free (Gratuito)");
@@ -86,6 +86,7 @@ public class StreamingMusica {
             System.out.println("3. Criar playlist (máx. 3)");
             System.out.println("4. 💎 Fazer upgrade para Premium");
         }
+        System.out.println("0. Sair");
         System.out.print("Escolha uma opção: ");
         
     }
@@ -129,7 +130,8 @@ public class StreamingMusica {
                     ((UsuarioPremium)usuarioAtual).baixarMusica(m); 
                     break;
                 case 5: ((UsuarioPremium)usuarioAtual).listarMusicasBaixadas(); break;
-                default: break;
+                case 0: break;
+                default: System.out.println("Opção inválida. Tente novamente."); break;
             }
         } else {
             switch(opcao) {
@@ -152,7 +154,8 @@ public class StreamingMusica {
                 usuarioAtual.criarPlaylist(nomePlaylist);
                 break;
                 case 4: fazerLogin();  break;
-                default: break;
+                case 0: break;
+                default: System.out.println("Opção inválida. Tente novamente."); break;
             }
         } 
     }
