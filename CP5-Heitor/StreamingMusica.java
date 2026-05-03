@@ -380,7 +380,7 @@ public class StreamingMusica {
         listarMusicas(resultados, "RESULTADOS DA BUSCA");
     }
 */
-    static void criarPlaylist() {
+    static void criarPlaylistManual() {
         System.out.println("\n--- CRIAR PLAYLIST ---");
         System.out.print("Nome da playlist: ");
         String nome = scanner.nextLine();
@@ -394,21 +394,58 @@ public class StreamingMusica {
         }
     }
 
+    static void criarPlaylistAutomatica() {
+        System.out.println("=== PLAYLISTS AUTOMÁTICAS ===");
+        System.out.println("1. Top 10 Mais Tocadas");
+        System.out.println("2. Recomendadas para Você");
+        System.out.println("3. Adicionadas Recentemente");
+        System.out.print("Escolha: ");
+        int escolha = lerOpcao();
+
+        if (escolha == 1) {
+            System.out.println("🤖 Gerando playlist \"Top 10 Mais Tocadas\"...");
+            try {
+                
+            } catch (IllegalArgumentException erro) {
+
+            }
+            System.out.println("✅ Playlist criada com 10 músicas!");
+        } else if (escolha == 2) {
+            System.out.println("🤖 Gerando playlist \"Recomendadas para Você\"...");
+        } else {
+            System.out.println("🤖 Gerando playlist \"Adicionadas Recentemente\"...");
+        }
+    }
+
+    static void menuPlaylists() {
+        System.out.println("\n=== GERENCIAR PLAYLISTS ===");
+        System.out.println("1. Criar playlist");
+        System.out.println("3. Listar minhas playlists");
+        System.out.println("4. Adicionar música a uma playlist");
+        System.out.println("5. Remover música de uma playlist");
+        System.out.println("6. Exibir detalhes de uma playlist");
+        System.out.println("0. Voltar");
+        System.out.print("Escolha: ");
+    }
+
     static void gerenciarPlaylists() {
         int opcao;
         do {
-            System.out.println("\n=== GERENCIAR PLAYLISTS ===");
-            System.out.println("1. Listar minhas playlists");
-            System.out.println("2. Adicionar música a uma playlist");
-            System.out.println("3. Remover música de uma playlist");
-            System.out.println("4. Exibir detalhes de uma playlist");
-            System.out.println("0. Voltar");
-            System.out.print("Escolha: ");
-            
+            menuPlaylists();
             opcao = lerOpcao();
             
             switch (opcao) {
-                case 1: 
+                case 1:
+                    System.out.println("1. Playlist Manual");
+                    System.out.println("2. Playlist Automática");
+                    int opcaoCriarPlaylist = lerOpcao();
+                    if (opcaoCriarPlaylist == 1) { criarPlaylistManual(); break; } 
+                    else {  break; }
+                    
+
+                    
+
+                case 2: 
                     System.out.println("\n--- MINHAS PLAYLISTS ---");
                     try {
                         ArrayList<Playlist> listas = usuarioAtual.getPlaylists();
@@ -419,16 +456,14 @@ public class StreamingMusica {
                         System.out.println(e.getMessage());
                     }
                     break;                   
-                case 2: adicionarMusicaPlaylist(); break;
-                case 3: removerMusicaPlaylist(); break;
-                case 4: exibirDetalhesPlaylist(); break;
+                case 3: adicionarMusicaPlaylist(); break;
+                case 4: removerMusicaPlaylist(); break;
+                case 5: exibirDetalhesPlaylist(); break;
                 case 0: break;
                 default: System.out.println("Opção Inválida");
             }
         } while (opcao != 0);
     }
-
-    
 
     static Playlist selecionarPlaylist() {
         System.out.println("\n--- MINHAS PLAYLISTS ---");
