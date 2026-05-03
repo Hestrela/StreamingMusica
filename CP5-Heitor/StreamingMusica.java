@@ -4,7 +4,8 @@ import java.util.Scanner;
 public class StreamingMusica {
 
     // Atributos que representam as classes  
-    static ArrayList<Musica> acervo = new ArrayList<>(); 
+    static ArrayList<Musica> acervo = new ArrayList<>();
+    static ArrayList<Usuario> usuarios = new ArrayList<>(); 
     static Usuario usuarioAtual; 
     static Scanner scanner = new Scanner(System.in);
     static final String[] GENEROS_VALIDOS = {"Pop", "Rock", "Jazz", "Eletrônica", "Hip-Hop", "Clássica"};
@@ -13,9 +14,8 @@ public class StreamingMusica {
         inicializarAcervo();
         // Laço de repetição que executa a função de exibir menu, ler e processar a opção do usuário 
         int opcao;
-        fazerLogin();
         do {   
-            exibirMenu();
+            exibirMenuPrincipal();
             opcao = lerOpcao();
             processarOpcao(opcao);
 
@@ -53,7 +53,7 @@ public class StreamingMusica {
         int tipoUsuario = lerOpcao();
 
         if (tipoUsuario == 1) {
-            usuarioAtual = new UsuarioFree(nomeUsuarioAtual, emailUsuarioAtual);
+            usuarios.add(new UsuarioFree(nomeUsuarioAtual, emailUsuarioAtual));
         } else if (tipoUsuario == 2){
             System.out.println("\nEscolha o plano Premium:");
             System.out.println("1. Mensal (R$ 19,90)");
@@ -66,14 +66,50 @@ public class StreamingMusica {
             if (opPlano == 2) planoEscolhido = "Anual";
             if (opPlano == 3) planoEscolhido = "Familiar";
 
-            usuarioAtual = new UsuarioPremium(nomeUsuarioAtual, emailUsuarioAtual, planoEscolhido);
+            usuarios.add(new UsuarioPremium(nomeUsuarioAtual, emailUsuarioAtual, planoEscolhido));
             System.out.println("✅ Conta Premium criada com sucesso!");
         }
     }
 
+    static void exibirMenuPrincipal() {
+        System.out.println("\n=== SISTEMA DE STREAMING ===");
 
-    static void exibirMenu() {
+        System.out.println("1. Criar novo usuário");
+        System.out.println("2. Login");
+        System.out.println("3. Listar usuários");
+        System.out.println("0. Sair");
+        System.out.print("Escolha: ");
+
+        int opcao = lerOpcao();
+
+        switch (opcao) {
+            case 1:
+                fazerLogin();
+                break;
+
+            case 2:
+                System.out.println("Usuários cadastrados: ");
+
+                for (Usuario u : usuarios) {
+                    System.out.printf("Nome: %s ", u.getNome()); 
+                    if (u instanceof UsuarioFree) {
+                        System.out.println("(Free)");
+                    } else {
+                        System.out.printf("(%s)", ((UsuarioPremium)u).getPlano());
+                    }
+                    
+                }
+        
+            default:
+                break;
+        }
+
+    }
+
+
+    static void exibirMenuUsuario() {
         System.out.println("\n=== SISTEMA DE STREAMING DE MÚSICA ===");
+
         if (usuarioAtual instanceof UsuarioPremium) {
             System.out.println("1. Reproduzir música (Alta Qualidade)");
             System.out.println("2. Ver histórico");
