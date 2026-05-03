@@ -40,7 +40,7 @@ public class StreamingMusica {
         acervo.add(new Musica("That's The Way It Is", "Daniel Lanois", 248, "Rock")); 
     }
 
-    static void fazerLogin() {
+    static void cadastroUsuario() {
         System.out.println("\n=== BEM-VINDO AO STREAMING ===");
         System.out.print("Digite seu nome: ");
         String nomeUsuarioAtual = scanner.nextLine();
@@ -85,6 +85,7 @@ public class StreamingMusica {
         System.out.print("Escolha: ");
     }
 
+    
 
     static void exibirMenuUsuario() {
         System.out.println("\n=== SISTEMA DE STREAMING DE MÚSICA ===");
@@ -117,10 +118,10 @@ public class StreamingMusica {
 
     static void processarOpcao(int opcao) {
         if (usuarioAtual == null) {
-            // Menu Principal (sem usuário autenticado)
+                  
             switch (opcao) {
                 case 1:
-                    fazerLogin();
+                    cadastroUsuario();
                     break;
                 case 2:
                     System.out.println("Usuários cadastrados: ");
@@ -129,12 +130,25 @@ public class StreamingMusica {
                         if (u instanceof UsuarioFree) {
                             System.out.println("(Free)");
                         } else {
-                            System.out.printf("(%s)\n", ((UsuarioPremium)u).getPlano());
+                            System.out.printf("(Premium)%n");
                         }
                     }
+                    System.out.print("Escolha o usuário: ");
+                    int opcaoUsuario = scanner.nextInt();
+                    
+
+                    exibirMenuUsuario();
                     break;
                 case 3:
-                    System.out.println("Listar usuários...");
+                    System.out.println("Usuários cadastrados: ");
+                    for (Usuario u : usuarios) {
+                        System.out.printf("Nome: %s ", u.getNome()); 
+                        if (u instanceof UsuarioFree) {
+                            System.out.println("(Free)");
+                        } else {
+                            System.out.printf("(Premium)%n");
+                        }
+                    }
                     break;
                 case 0:
                     break;
@@ -194,7 +208,7 @@ public class StreamingMusica {
                 String nomePlaylist = scanner.nextLine();
                 usuarioAtual.criarPlaylist(nomePlaylist);
                 break;
-                case 4: fazerLogin();  break;
+                case 4: cadastroUsuario();  break;
                 case 0: break;
                 default: System.out.println("Opção inválida. Tente novamente."); break;
             }
