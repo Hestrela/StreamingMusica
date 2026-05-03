@@ -74,36 +74,15 @@ public class StreamingMusica {
     static void exibirMenuPrincipal() {
         System.out.println("\n=== SISTEMA DE STREAMING ===");
 
-        System.out.println("1. Criar novo usuário");
-        System.out.println("2. Login");
-        System.out.println("3. Listar usuários");
+        if (usuarioAtual == null) {
+            System.out.println("1. Criar novo usuário");
+            System.out.println("2. Login");
+            System.out.println("3. Listar usuários");
+        } else {
+            exibirMenuUsuario();
+        }
         System.out.println("0. Sair");
         System.out.print("Escolha: ");
-
-        int opcao = lerOpcao();
-
-        switch (opcao) {
-            case 1:
-                fazerLogin();
-                break;
-
-            case 2:
-                System.out.println("Usuários cadastrados: ");
-
-                for (Usuario u : usuarios) {
-                    System.out.printf("Nome: %s ", u.getNome()); 
-                    if (u instanceof UsuarioFree) {
-                        System.out.println("(Free)");
-                    } else {
-                        System.out.printf("(%s)", ((UsuarioPremium)u).getPlano());
-                    }
-                    
-                }
-        
-            default:
-                break;
-        }
-
     }
 
 
@@ -137,7 +116,33 @@ public class StreamingMusica {
     }
 
     static void processarOpcao(int opcao) {
-        if (usuarioAtual instanceof UsuarioPremium) {
+        if (usuarioAtual == null) {
+            // Menu Principal (sem usuário autenticado)
+            switch (opcao) {
+                case 1:
+                    fazerLogin();
+                    break;
+                case 2:
+                    System.out.println("Usuários cadastrados: ");
+                    for (Usuario u : usuarios) {
+                        System.out.printf("Nome: %s ", u.getNome()); 
+                        if (u instanceof UsuarioFree) {
+                            System.out.println("(Free)");
+                        } else {
+                            System.out.printf("(%s)\n", ((UsuarioPremium)u).getPlano());
+                        }
+                    }
+                    break;
+                case 3:
+                    System.out.println("Listar usuários...");
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+                    break;
+            }
+        } else if (usuarioAtual instanceof UsuarioPremium) {
             switch (opcao) {
                 case 1: {
                     listarMusicas(acervo, "MÚSICAS");
