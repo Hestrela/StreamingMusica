@@ -13,13 +13,20 @@ public class StreamingMusica {
     public static void main(String[] args) {
         inicializarAcervo();
         // Laço de repetição que executa a função de exibir menu, ler e processar a opção do usuário 
-        int opcao;
-        do {   
+        int opcaoMenu = -1;
+        int opcaoUsuario;
+        do { 
+            if (usuarioAtual == null) {                          
             exibirMenuPrincipal();
-            opcao = lerOpcao();
-            processarOpcao(opcao);
+            opcaoMenu = lerOpcao();
+            processarOpcao(opcaoMenu);
+            } else {
+                exibirMenuUsuario();
+                opcaoUsuario = lerOpcao();
+                processarOpcaoUsuario(opcaoUsuario);
+            }
 
-        } while (opcao != 0);
+        } while (opcaoMenu != 0);
 
         System.out.println("\n🎵 Até logo! 🎵");
         scanner.close();
@@ -74,18 +81,22 @@ public class StreamingMusica {
     static void exibirMenuPrincipal() {
         System.out.println("\n=== SISTEMA DE STREAMING ===");
 
-        if (usuarioAtual == null) {
             System.out.println("1. Criar novo usuário");
             System.out.println("2. Login");
             System.out.println("3. Listar usuários");
-        } else {
-            exibirMenuUsuario();
-        }
-        System.out.println("0. Sair");
-        System.out.print("Escolha: ");
+            System.out.println("0. Sair");
+            System.out.print("Escolha: ");  
     }
 
-    
+    static void fazerlogin(int opcao) {
+        usuarioAtual = usuarios.get(opcao);
+        System.out.printf("Login realizado: %s ", usuarioAtual.getNome());
+        if (usuarioAtual instanceof UsuarioFree) {
+            System.out.println("(Free)");
+        } else {
+            System.out.println("(Premium)");
+        }
+    }
 
     static void exibirMenuUsuario() {
         System.out.println("\n=== SISTEMA DE STREAMING DE MÚSICA ===");
@@ -107,6 +118,18 @@ public class StreamingMusica {
         
     }
 
+    static void listarUsuariosCadastrados(){
+        int indice = 1;
+        for (Usuario u : usuarios) {
+            System.out.printf("%d. Nome: %s ", indice++ ,u.getNome()); 
+            if (u instanceof UsuarioFree) {
+                System.out.println("(Free)");
+            } else {
+                 System.out.printf("(Premium)%n");
+            }
+        }
+    }
+
     static int lerOpcao() {
         // Tenta transformar a opção do usuário em integer e retorna -1 caso haja erro de formato
         try {
@@ -117,38 +140,20 @@ public class StreamingMusica {
     }
 
     static void processarOpcao(int opcao) {
-        if (usuarioAtual == null) {
-                  
+        if (usuarioAtual == null) {                 
             switch (opcao) {
                 case 1:
                     cadastroUsuario();
                     break;
                 case 2:
                     System.out.println("Usuários cadastrados: ");
-                    for (Usuario u : usuarios) {
-                        System.out.printf("Nome: %s ", u.getNome()); 
-                        if (u instanceof UsuarioFree) {
-                            System.out.println("(Free)");
-                        } else {
-                            System.out.printf("(Premium)%n");
-                        }
-                    }
+                    listarUsuariosCadastrados();
                     System.out.print("Escolha o usuário: ");
-                    int opcaoUsuario = scanner.nextInt();
-                    
-
-                    exibirMenuUsuario();
+                    int opcaoUsuario = lerOpcao();
+                    fazerlogin(opcaoUsuario - 1);
                     break;
                 case 3:
-                    System.out.println("Usuários cadastrados: ");
-                    for (Usuario u : usuarios) {
-                        System.out.printf("Nome: %s ", u.getNome()); 
-                        if (u instanceof UsuarioFree) {
-                            System.out.println("(Free)");
-                        } else {
-                            System.out.printf("(Premium)%n");
-                        }
-                    }
+                    listarUsuariosCadastrados();
                     break;
                 case 0:
                     break;
@@ -156,7 +161,11 @@ public class StreamingMusica {
                     System.out.println("Opção inválida. Tente novamente.");
                     break;
             }
-        } else if (usuarioAtual instanceof UsuarioPremium) {
+        }
+    }
+
+    static void processarOpcaoUsuario(int opcao) {
+         if (usuarioAtual instanceof UsuarioPremium) {
             switch (opcao) {
                 case 1: {
                     listarMusicas(acervo, "MÚSICAS");
@@ -185,7 +194,7 @@ public class StreamingMusica {
                     ((UsuarioPremium)usuarioAtual).baixarMusica(m); 
                     break;
                 case 5: ((UsuarioPremium)usuarioAtual).listarMusicasBaixadas(); break;
-                case 0: break;
+                case 0: usuarioAtual = null; break;
                 default: System.out.println("Opção inválida. Tente novamente."); break;
             }
         } else {
@@ -208,8 +217,8 @@ public class StreamingMusica {
                 String nomePlaylist = scanner.nextLine();
                 usuarioAtual.criarPlaylist(nomePlaylist);
                 break;
-                case 4: cadastroUsuario();  break;
-                case 0: break;
+                case 4: System.out.println("Funcionalidade WIP");  break;
+                case 0: usuarioAtual = null; break;
                 default: System.out.println("Opção inválida. Tente novamente."); break;
             }
         } 
@@ -500,49 +509,24 @@ public class StreamingMusica {
 
     static void exibirEstatisticas() {
         System.out.println("\n=== ESTATÍSTICAS DO SISTEMA ===");
-        int total = acervo.size();
-        System.out.println("Total de músicas no acervo: " + total);
+        int totalUsuarios = 0;
+        int usuariosFree = 0;
+        int usuariosPremium = 0;
 
-        // Se a playlist for nula, retorna ao menu
-        if (total == 0) return;
-
-        int somaDuracao = 0;
-
-        // Percorre a lista acervo e busca a duração de cada música
-        for (int i = 0; i < acervo.size(); i++) {
-            somaDuracao += acervo.get(i).getDuracao();
+        for (Usuario u : usuarios) {
+            totalUsuarios++;
+            if (u instanceof UsuarioFree) {
+                usuariosFree++;               
+            } else {
+                usuariosPremium++;
+            }
         }
+        System.out.println("Total de usuários: " + totalUsuarios);
+        System.out.printf("- Free: %d usuários%n", usuariosFree);
+        System.out.printf("- Premium: %d usuários%n", usuariosPremium);
+
         
-        int minTotal = somaDuracao / 60;
-        int segTotal = somaDuracao % 60;
-        System.out.println("Duração total do acervo: " + String.format("%d:%02d", minTotal, segTotal));
 
-        int[] contadores = new int[GENEROS_VALIDOS.length];
-
-        //Percorre a lista acervo em busca do genêro da música
-        for (int i = 0; i < acervo.size(); i++) {
-            String generoDaMusica = acervo.get(i).getGenero();
-            for (int j = 0; j < GENEROS_VALIDOS.length; j++) {
-                // Valida se o genêro da música está contida na lista de genêros válidos
-                if (generoDaMusica.equalsIgnoreCase(GENEROS_VALIDOS[j])) {
-                    contadores[j]++;
-                    break;
-                }
-            }
-        }
-
-        int maximo = 0;
-        String generoMaisCadastrado = "";
-        for (int i = 0; i < contadores.length; i++) {
-            // Valida se o laço e menor que o tamanho da lista de genẽros válidos para calcular o genêro mais cadastrado
-            if (contadores[i] > maximo) {
-                maximo = contadores[i];
-                generoMaisCadastrado = GENEROS_VALIDOS[i];
-            }
-        }
-
-        if (maximo > 0) {
-            System.out.println("Gênero mais cadastrado: " + generoMaisCadastrado + " (" + maximo + " músicas)");
-        }
+        
     }
 }
