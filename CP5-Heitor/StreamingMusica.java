@@ -512,21 +512,35 @@ public class StreamingMusica {
         int totalUsuarios = 0;
         int usuariosFree = 0;
         int usuariosPremium = 0;
+        int reproducoesTotais = 0;
+        int reproducoesFree = 0;
+        int reproducoesPremium = 0;
+        int anunciosExibidos = 0;
 
         for (Usuario u : usuarios) {
             totalUsuarios++;
             if (u instanceof UsuarioFree) {
-                usuariosFree++;               
+                usuariosFree++;         
+                UsuarioFree free = (UsuarioFree) u;
+                reproducoesFree += free.getHistoricoReproducao().size();
+                anunciosExibidos += free.getHistoricoReproducao().size() / 3;    
             } else {
                 usuariosPremium++;
+                UsuarioPremium premium = (UsuarioPremium) u;
+                reproducoesPremium += premium.getHistoricoReproducao().size();
             }
         }
+
+        reproducoesTotais = reproducoesFree + reproducoesPremium;
+
         System.out.println("Total de usuários: " + totalUsuarios);
         System.out.printf("- Free: %d usuários%n", usuariosFree);
-        System.out.printf("- Premium: %d usuários%n", usuariosPremium);
-
+        System.out.printf("- Premium: %d usuários%n", usuariosPremium);  
         
-
+        System.out.println("Reproduções totais: " + reproducoesTotais);
+        System.out.printf("- Free: %d reproduções%n", reproducoesFree);
+        System.out.printf("- Premium: %d reproduções%n", reproducoesPremium);
         
+        System.out.println("Anúncios exibidos: " + anunciosExibidos);
     }
 }
