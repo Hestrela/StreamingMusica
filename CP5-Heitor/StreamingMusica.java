@@ -409,6 +409,7 @@ public class StreamingMusica {
             System.out.println("🤖 Gerando playlist \"Top 10 Mais Tocadas\"...");
             PlaylistAutomatica playlistTop = new PlaylistAutomatica(nomePlaylist,"top");
             playlistTop.atualizar(acervo, usuarioAtual.getHistoricoReproducao());
+            usuarioAtual.getPlaylists().add(playlistTop);
             System.out.println("✅ Playlist criada com 10 músicas!");
         } else if (escolha == 2) {
             System.out.println("🤖 Gerando playlist \"Recomendadas para Você\"...");
