@@ -155,9 +155,12 @@ public class StreamingMusica {
                     break;
                 case 0: break;
                 case 999:
-                    exibirMenuAdmin();
-                    int opcaoAdmin = lerOpcao();
-                    processarOpcaoAdmin(opcaoAdmin);
+                    int opcaoAdmin;
+                    do {
+                        exibirMenuAdmin();
+                        opcaoAdmin = lerOpcao();
+                        processarOpcaoAdmin(opcaoAdmin);
+                    } while (opcaoAdmin != 0);
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
                     break;
@@ -470,18 +473,6 @@ public class StreamingMusica {
         System.out.print("Escolha uma opção: ");
     }
 
-    static void processarOpcaoAdmin(int opcao) {
-        switch (opcao) {
-            case 1: cadastrarMusica(); break;
-            case 2: listarMusicas(acervo, "MÚSICAS CADASTRADAS NO ACERVO"); break;
-            case 3: menuBuscarMusica(); break;
-            case 4: editarMusica(); break;
-            case 5: exibirEstatisticas(); break;
-            case 0: break;
-            default: System.out.println("Opção Inválida");
-        }
-    }
-
     static void cadastrarMusica() {
         try {
             System.out.println("\n--- CADASTRAR MÚSICA ---");
@@ -593,6 +584,18 @@ public class StreamingMusica {
         }
         
         listarMusicas(resultados, "RESULTADOS DA BUSCA");
+    }
+
+    static void processarOpcaoAdmin(int opcao) {
+        switch (opcao) {
+            case 1: cadastrarMusica(); break;
+            case 2: listarMusicas(acervo, "MÚSICAS CADASTRADAS NO ACERVO"); break;
+            case 3: menuBuscarMusica(); break;
+            case 4: editarMusica(); break;
+            case 5: exibirEstatisticas(); break;
+            case 0: break;
+            default: System.out.println("Opção Inválida");
+        }
     }
 }
 
