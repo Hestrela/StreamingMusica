@@ -402,18 +402,26 @@ public class StreamingMusica {
         System.out.print("Escolha: ");
         int escolha = lerOpcao();
 
+        System.out.print("Digite o nome desejado para a playlist: ");
+        String nomePlaylist = scanner.nextLine();
+
         if (escolha == 1) {
             System.out.println("🤖 Gerando playlist \"Top 10 Mais Tocadas\"...");
-            try {
-                
-            } catch (IllegalArgumentException erro) {
-
-            }
+            PlaylistAutomatica playlistTop = new PlaylistAutomatica(nomePlaylist,"top");
+            playlistTop.atualizar(acervo, usuarioAtual.getHistoricoReproducao());
             System.out.println("✅ Playlist criada com 10 músicas!");
         } else if (escolha == 2) {
             System.out.println("🤖 Gerando playlist \"Recomendadas para Você\"...");
+            PlaylistAutomatica playlistRecomendada = new PlaylistAutomatica(nomePlaylist,"recomendadas");
+            playlistRecomendada.atualizar(acervo, usuarioAtual.getHistoricoReproducao());
+            usuarioAtual.getPlaylists().add(playlistRecomendada);
+            System.out.println("✅ Playlist criada!");
         } else {
             System.out.println("🤖 Gerando playlist \"Adicionadas Recentemente\"...");
+            PlaylistAutomatica playlistRecente = new PlaylistAutomatica(nomePlaylist,"Recente");
+            playlistRecente.atualizar(acervo, usuarioAtual.getHistoricoReproducao());
+            usuarioAtual.getPlaylists().add(playlistRecente);
+            System.out.println("✅ Playlist criada!");
         }
     }
 
@@ -440,10 +448,7 @@ public class StreamingMusica {
                     System.out.println("2. Playlist Automática");
                     int opcaoCriarPlaylist = lerOpcao();
                     if (opcaoCriarPlaylist == 1) { criarPlaylistManual(); break; } 
-                    else {  break; }
-                    
-
-                    
+                    else {  break; }                 
 
                 case 2: 
                     System.out.println("\n--- MINHAS PLAYLISTS ---");
