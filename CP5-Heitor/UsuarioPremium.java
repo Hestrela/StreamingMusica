@@ -40,6 +40,13 @@ public final class UsuarioPremium extends Usuario {
         }
     }
 
+    @Override
+    public void exibirDetalhesConta() {
+        System.out.println("--- DETALHES DA CONTA ---");
+        System.out.println("Tipo: Premium");
+        System.out.println("Plano contratado: " + plano);
+    }
+
     public String getPlano() {
         return plano;
     }

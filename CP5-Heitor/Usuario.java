@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 // Classe que representa o usuário e gerencia playlists
-public class Usuario {
+public abstract class Usuario {
     protected String nome;
     protected String email;
     protected ArrayList<Playlist> playlists;
@@ -32,6 +32,8 @@ public class Usuario {
         playlists.add(playlist);
         System.out.println("✅ Playlist criada!");
     }
+
+    public abstract void exibirDetalhesConta(); 
 
      public String getNome() {
         return nome;

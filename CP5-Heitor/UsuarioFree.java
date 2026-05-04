@@ -47,4 +47,11 @@ public final class UsuarioFree extends Usuario {
         System.out.println("📢 ANÚNCIO: Assine Premium e ouça sem interrupções!");
         System.out.println("=".repeat(50) + "\n");
     }
+
+    @Override
+    public void exibirDetalhesConta() {
+        System.out.println("--- DETALHES DA CONTA ---");
+        System.out.println("Tipo: Gratuita (Free)");
+        System.out.println("Limite de Playlists: " + MAX_PLAYLISTS);
+    }
 }
