@@ -12,6 +12,7 @@ public final class UsuarioPremium extends Usuario {
         this.musicasBaixadas = new ArrayList<>();
     }
     
+    @Override
     public void reproduzirMusica(Musica musica) {
         System.out.println("🎵 Reproduzindo em ALTA QUALIDADE: " + musica.getTitulo());
         historicoReproducao.add(musica);
