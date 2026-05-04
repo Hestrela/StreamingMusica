@@ -1,4 +1,4 @@
-public class UsuarioFree extends Usuario {
+public final class UsuarioFree extends Usuario {
     private static final int MAX_PLAYLISTS = 3;
     private int contadorReproducoes;
     private int limiteReproducoes;

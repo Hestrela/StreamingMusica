@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-public class PlaylistAutomatica extends Playlist{
+public final class PlaylistAutomatica extends Playlist{
     private String criterio;
 
     public PlaylistAutomatica(String nome,String criterio) {

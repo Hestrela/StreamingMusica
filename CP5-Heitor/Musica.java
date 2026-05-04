@@ -1,5 +1,5 @@
 // Classe que representa uma música e sua regras de validação
-public class Musica {
+public final class Musica {
 
     private String titulo;
     private String artista;

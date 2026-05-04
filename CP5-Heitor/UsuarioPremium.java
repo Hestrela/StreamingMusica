@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class UsuarioPremium extends Usuario {
+public final class UsuarioPremium extends Usuario {
     private String plano; // Mensal, Anual, Familiar
     private ArrayList<Musica> musicasBaixadas;
 
