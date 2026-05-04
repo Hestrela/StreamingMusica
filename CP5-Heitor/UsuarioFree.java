@@ -1,8 +1,10 @@
+// Classe que representa o usuário tipo free, com as funções padrões dos usuários, mas com limitações
 public final class UsuarioFree extends Usuario {
     private static final int MAX_PLAYLISTS = 3;
     private int contadorReproducoes;
     private int limiteReproducoes;
     
+    // Construtor parametrizado
     public UsuarioFree(String nome, String email) {
         super(nome, email); // Chama construtor da superclasse
         this.contadorReproducoes = 0;
@@ -28,12 +30,13 @@ public final class UsuarioFree extends Usuario {
     
     @Override
     public void criarPlaylist(String nome) {
+        // Verifica se a quantidade de playlists é maior que o permitido
         if (playlists.size() >= MAX_PLAYLISTS) {
             System.out.println("❌ Limite de playlists atingido!");
             System.out.println("💎 Assine Premium para playlists ilimitadas!");
             return;
         }
-        
+        // Caso não, a playlist é criada
         Playlist playlist = new Playlist(nome);
         playlists.add(playlist);
         System.out.println("✅ Playlist criada!");

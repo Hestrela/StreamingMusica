@@ -1,9 +1,12 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+// Subclasse de Playlist, responsável por automatizar a criação de playlists conforme critério do usuário
 public final class PlaylistAutomatica extends Playlist{
+    // Atributo único da subclasse PlaylistAutomatica
     private String criterio;
 
+    //Construtor Parametrizado
     public PlaylistAutomatica(String nome,String criterio) {
         super(nome);
         setCriterio(criterio);
@@ -24,15 +27,18 @@ public final class PlaylistAutomatica extends Playlist{
         super.reproduzir();
     }
 
+    // Função que atualiza a playlist de forma automatica conforme criterio do usuario
     public void atualizar(ArrayList<Musica> todasMusicas, ArrayList<Musica> historicoUsuario) {
+        // Limpa o array de musicas
         musicas.clear();
         
+        // Verifica o criterio do usuário
         if (criterio.equals("top")) {
-            // Arrays auxiliares para funcionar como nossa "tabela" de contagem
+            // Arrays auxiliares para funcionar como uma tabela de contagem
             ArrayList<Musica> musicasUnicas = new ArrayList<>();
             ArrayList<Integer> contagens = new ArrayList<>();
 
-            // 1. Percorre o histórico e conta as ocorrências
+            // Percorre o histórico e conta as ocorrências
             for (Musica m : historicoUsuario) {
                 int indice = musicasUnicas.indexOf(m);
                 
@@ -41,13 +47,13 @@ public final class PlaylistAutomatica extends Playlist{
                     musicasUnicas.add(m);
                     contagens.add(1);
                 } else {
-                    // Música já existe, apenas incrementamos o contador
+                    // Música já existe, então o contador é incrementado
                     int contagemAtual = contagens.get(indice);
                     contagens.set(indice, contagemAtual + 1);
                 }
             }
 
-            // 2. Encontra a música com o maior número na lista de contagens
+            // Encontra a música com o maior número na lista de contagens
             int maxReproducoes = 0;
             Musica maisTocada = null;
             
@@ -58,28 +64,26 @@ public final class PlaylistAutomatica extends Playlist{
                 }
             }
             
-            // 3. Adiciona a música campeã na playlist automática
+            // Adiciona a música mais tocada na playlist automática
             if (maisTocada != null) {
                 musicas.add(maisTocada);
             }
             
         } else if (criterio.equals("recomendadas")) {
-            // 1. Verificamos se tem músicas no acervo para evitar erros
-            if (!todasMusicas.isEmpty()) {
-                
-               
+            // Verifica se tem músicas no acervo para evitar erros
+            if (!todasMusicas.isEmpty()) {              
                 Random sorteador = new java.util.Random();
                 
-                // 3. Vamos sortear 5 músicas para a playlist recomendada, por exemplo
-                for (int i = 0; i < 5; i++) {
+                // Sorteia 5 músicas para a playlist recomendada, por exemplo
+                for (int i = 0; i < 10; i++) {
                     
                     // Sorteia um número entre 0 e o limite máximo do acervo
                     int indiceSorteado = sorteador.nextInt(todasMusicas.size());
                     
-                    // Pesca a música correspondente a esse número
+                    // Pega a música correspondente a esse número
                     Musica recomendada = todasMusicas.get(indiceSorteado);
                     
-                    // Adiciona a música pescada na nossa playlist
+                    // Adiciona a música na playlist
                     musicas.add(recomendada);
                 }
             }

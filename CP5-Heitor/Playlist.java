@@ -7,9 +7,10 @@ public class Playlist {
     protected ArrayList<Musica> musicas;
     protected String descricao;
 
-
+    // Função que imprime a mensagem de reprodução
     public void reproduzir() {
         System.out.println("🎵 Reproduzindo playlist: " + nome);
+        // Percorre a lista de musicas para pegar o título
         for (Musica m : musicas) {
             System.out.println("  ▶ " + m.getTitulo());
         }

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+// Classe principal do programa
 public class StreamingMusica {
     // Atributos que representam as classes  
     static ArrayList<Musica> acervo = new ArrayList<>();
@@ -30,6 +31,7 @@ public class StreamingMusica {
         scanner.close();
     }
 
+    // Método que preenche o acervo com músicas aleatórias
     static void inicializarAcervo() {
         System.out.println("Carregando acervo inicial de músicas...");
         
@@ -39,9 +41,7 @@ public class StreamingMusica {
         acervo.add(new Musica("Take Five", "Dave Brubeck", 324, "Jazz"));
         acervo.add(new Musica("Strobe", "deadmau5", 637, "Eletrônica"));
         acervo.add(new Musica("Lose Yourself", "Eminem", 326, "Hip-Hop"));
-        acervo.add(new Musica("Sinfonia Nº 9 (Trecho)", "Ludwig van Beethoven", 600, "Clássica"));
-        
-        // Como você gosta de jogos com boa ambientação, deixei um bônus aqui no Rock:
+        acervo.add(new Musica("Sinfonia Nº 9 (Trecho)", "Ludwig van Beethoven", 600, "Clássica"));       
         acervo.add(new Musica("That's The Way It Is", "Daniel Lanois", 248, "Rock")); 
     }
 
@@ -57,6 +57,7 @@ public class StreamingMusica {
         System.out.print("Escolha: ");
         int tipoUsuario = lerOpcao();
 
+        // Verifica e adiciona o usuario no array de usuarios, tanto free quanto premium 
         if (tipoUsuario == 1) {
             usuarios.add(new UsuarioFree(nomeUsuarioAtual, emailUsuarioAtual));
         } else if (tipoUsuario == 2){
@@ -86,9 +87,11 @@ public class StreamingMusica {
             System.out.print("Escolha: ");  
     }
 
+    // Imprime uma mensagem quando algum usuário cadastrado é logado 
     static void fazerlogin(int opcao) {
         usuarioAtual = usuarios.get(opcao);
         System.out.printf("Login realizado: %s ", usuarioAtual.getNome());
+        // Verifica se o usuário é free ou premium e imprime o tipo
         if (usuarioAtual instanceof UsuarioFree) {
             System.out.println("(Free)");
         } else {
@@ -96,9 +99,11 @@ public class StreamingMusica {
         }
     }
 
+    // Método que exibe um menu conforme tipo do usuário logado
     static void exibirMenuUsuario() {
         System.out.println("\n=== SISTEMA DE STREAMING DE MÚSICA ===");
 
+        // Verifica se o usuário logado é premium ou free
         if (usuarioAtual instanceof UsuarioPremium) {
             System.out.println("1. Reproduzir música (Alta Qualidade)");
             System.out.println("2. Ver histórico");
@@ -118,8 +123,10 @@ public class StreamingMusica {
 
     static void listarUsuariosCadastrados(){
         int indice = 1;
+        // Percorre o array de usuarios e pega o nome de cada um
         for (Usuario u : usuarios) {
             System.out.printf("%d. Nome: %s ", indice++ ,u.getNome()); 
+            // Verifica se é premium ou free
             if (u instanceof UsuarioFree) {
                 System.out.println("(Free)");
             } else {
@@ -137,6 +144,7 @@ public class StreamingMusica {
         }
     }
 
+    // Processa a opção do usuário no menu principal
     static void processarOpcao(int opcao) {
         if (usuarioAtual == null) {                 
             switch (opcao) {
@@ -154,6 +162,7 @@ public class StreamingMusica {
                     listarUsuariosCadastrados();
                     break;
                 case 0: break;
+                // Opção "secreta" com funções desenvolvidas nos checkpoints anteriores
                 case 999:
                     int opcaoAdmin;
                     do {
@@ -168,12 +177,15 @@ public class StreamingMusica {
         }
     }
 
+    // Processa a opção digitada no menu de usuários
     static void processarOpcaoUsuario(int opcao) {
         switch (opcao) {
+            // Lista as músicas, pede que o usuários as selecione
             case 1: {
                 listarMusicas(acervo, "MÚSICAS");
                 System.out.print("Selecione a música desejada: ");
                 int musicaDesejada = lerOpcao() - 1;
+                // Verifica se a musica desejada é um indice que está dentro do limite do array e se é maior que zero
                 if (musicaDesejada < acervo.size() && musicaDesejada >= 0) {
                     Musica m = acervo.get(musicaDesejada);
                     usuarioAtual.reproduzirMusica(m); 
@@ -189,8 +201,8 @@ public class StreamingMusica {
                 String nomePlaylist = scanner.nextLine();
                 usuarioAtual.criarPlaylist(nomePlaylist);
                 break;
-
             case 4:
+                // Se o usuário logado é premium, a opção de baixar música é ativada naturalmente
                 if (usuarioAtual instanceof UsuarioPremium) {
                     listarMusicas(acervo, "MÚSICAS");
                     System.out.print("Selecione a música desejada: ");
@@ -198,10 +210,12 @@ public class StreamingMusica {
                     Musica m = acervo.get(musicaDesejada);
                     ((UsuarioPremium)usuarioAtual).baixarMusica(m); 
                     break;
+                // Caso contrário, apenas imprime uma mensage de erro
                 } else {
                     System.out.println("Função exclusiva para usuários premium!");
                 }
                 case 5:
+                    // Só chama o método listarMusicasBaixadas se o usuário logado for premium
                     if (usuarioAtual instanceof UsuarioPremium) {
                     ((UsuarioPremium)usuarioAtual).listarMusicasBaixadas(); 
                     break;
@@ -280,7 +294,8 @@ public class StreamingMusica {
 
         System.out.print("Digite o nome desejado para a playlist: ");
         String nomePlaylist = scanner.nextLine();
-
+        
+        // Cria a playlist automatica conforme critério e adiciona no array de playlists do usuário
         if (escolha == 1) {
             System.out.println("🤖 Gerando playlist \"Top 10 Mais Tocadas\"...");
             PlaylistAutomatica playlistTop = new PlaylistAutomatica(nomePlaylist,"top");
@@ -329,6 +344,7 @@ public class StreamingMusica {
 
                 case 2: 
                     System.out.println("\n--- MINHAS PLAYLISTS ---");
+                    // Tenta percorrer uma lista com as playlists do usuario e imprime suas informações
                     try {
                         ArrayList<Playlist> listas = usuarioAtual.getPlaylists();
                         for (int i = 0; i < listas.size(); i++) {
@@ -434,22 +450,33 @@ public class StreamingMusica {
         int reproducoesPremium = 0;
         int anunciosExibidos = 0;
 
+        // Percorre o array de usuarios
         for (Usuario u : usuarios) {
+            // A cada elemento percorrido, acumula na variavel
             totalUsuarios++;
+            // Verifica se o usuário é Free
             if (u instanceof UsuarioFree) {
-                usuariosFree++;         
+                // Adiciona o usuário free ao contador
+                usuariosFree++;
+                // Casting para acessar as opções da superclasse Playlist         
                 UsuarioFree free = (UsuarioFree) u;
+                // Acessa o histórico de reprodução do usuário
                 reproducoesFree += free.getHistoricoReproducao().size();
+                // A cada 3 reproduções, 1 anúncio é exibido, sendo assim, é só dividir as reproduções por 3,
+                // acumulando assim no contador
                 anunciosExibidos += free.getHistoricoReproducao().size() / 3;    
             } else {
+                // Mesmo do anterior, sem a parte dos anúncios
                 usuariosPremium++;
                 UsuarioPremium premium = (UsuarioPremium) u;
                 reproducoesPremium += premium.getHistoricoReproducao().size();
             }
         }
 
+        // Soma as reproduções de cada tipo de usuário
         reproducoesTotais = reproducoesFree + reproducoesPremium;
 
+        // Imprime as estatísticas calculadas acima
         System.out.println("Total de usuários: " + totalUsuarios);
         System.out.printf("- Free: %d usuários%n", usuariosFree);
         System.out.printf("- Premium: %d usuários%n", usuariosPremium);  
