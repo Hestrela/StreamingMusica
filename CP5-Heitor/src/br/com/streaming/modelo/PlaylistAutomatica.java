@@ -1,3 +1,5 @@
+package br.com.streaming.modelo
+
 import java.util.ArrayList;
 import java.util.Random;
 

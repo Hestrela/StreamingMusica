@@ -1,3 +1,5 @@
+package br.com.streaming.modelo
+
 import java.util.ArrayList;
 
 // Classe que representa uma playlist, seu gerenciamento e suas validações
