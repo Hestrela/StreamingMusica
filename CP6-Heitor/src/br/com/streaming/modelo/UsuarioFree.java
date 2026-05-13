@@ -1,4 +1,4 @@
-package br.com.streaming.modelo
+package br.com.streaming.modelo;
 
 // Classe que representa o usuário tipo free, com as funções padrões dos usuários, mas com limitações
 public final class UsuarioFree extends Usuario {

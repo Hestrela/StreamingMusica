@@ -1,9 +1,10 @@
-package br.com.streaming.modelo
+package br.com.streaming.modelo;
+import br.com.streaming.servico.Baixavel;
 
 import java.util.ArrayList;
 
 // Classe que representa o Usuário tipo premium, com os métodos padrões da classe Usuario + extras
-public final class UsuarioPremium extends Usuario {
+public final class UsuarioPremium extends Usuario implements Baixavel {
     private String plano; // Mensal, Anual, Familiar
     private ArrayList<Musica> musicasBaixadas;
 

@@ -1,4 +1,4 @@
-package br.com.streaming.modelo
+package br.com.streaming.modelo;
 
 import java.util.ArrayList;
 

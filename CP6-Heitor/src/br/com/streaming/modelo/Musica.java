@@ -1,4 +1,4 @@
-package br.com.streaming.modelo
+package br.com.streaming.modelo;
 // Classe que representa uma música e sua regras de validação
 public final class Musica {
 
