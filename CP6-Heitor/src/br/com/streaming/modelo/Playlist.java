@@ -2,91 +2,75 @@ package br.com.streaming.modelo;
 
 import java.util.ArrayList;
 
-// Classe que representa uma playlist, seu gerenciamento e suas validações
-public class Playlist {
+public class Playlist extends ItemReproducao {
 
-    protected String nome;
     protected ArrayList<Musica> musicas;
     protected String descricao;
 
-    // Função que imprime a mensagem de reprodução
-    public void reproduzir() {
-        System.out.println("🎵 Reproduzindo playlist: " + nome);
-        // Percorre a lista de musicas para pegar o título
-        for (Musica m : musicas) {
-            System.out.println("  ▶ " + m.getTitulo());
-        }
+    public Playlist() {
+        super("Desconhecido");
+        this.musicas = new ArrayList<>();
     }
 
-    public String getNome() { return nome; }
-
-    public void setNome(String nome) {
-        // Verifica se o nome da playlist tem valor nulo
-        if (nome == null) {
-            throw new IllegalArgumentException("O nome não pode ser nulo!");
-        } else {
-            // Valida se o nomme da playlist não é vazio
-            String nomeCorreto = nome.trim();
-            if (nomeCorreto.isEmpty()) {
-                throw new IllegalArgumentException("O nome da playlist não deve ser vazio!");
-            } else {
-                this.nome = nomeCorreto;
-            }
-        }
+    public Playlist(String nome) {
+        super(nome);
+        this.musicas = new ArrayList<>();
     }
 
     public ArrayList<Musica> getMusicas() { return musicas; }
 
     public void adicionarMusica(Musica musica) {
-        // Valida se a música é um valor nulo
         if (musica == null) {
             throw new IllegalArgumentException("A música não deve ser nula!");
-        } else {
-            musicas.add(musica);
         }
+        musicas.add(musica);
     }
 
     public void removerMusica(int indice) {
-        // Valida se o índice é maior ou igual ao tamanho do Array musicas ou se o índice é menor que zero 
         if (indice >= musicas.size() || indice < 0) {
             throw new IllegalArgumentException("O índice não deve ser negativo ou maior que o tamanho da lista de músicas");
-        } else {       
-                musicas.remove(indice);         
         }
+        musicas.remove(indice);         
     }
 
     public void listarMusicas() {
-        // Percorre a lista de músicas e imprime seus dados
         for (int indice = 0; indice < musicas.size(); indice++) {
             Musica m = musicas.get(indice);         
+            // Usando getNome() em vez de getTitulo()
             System.out.printf("%d. Nome: %s | Artista: %s | Duração: %d segundos | Gênero: %s%n"
-                , (indice + 1), m.getTitulo(), m.getArtista(), m.getDuracao(), m.getGenero()
+                , (indice + 1), m.getNome(), m.getArtista(), m.getDuracao(), m.getGenero()
             );
         }
     }
 
+    public int getQuantidadeMusicas() { return musicas.size(); }
+
+    // --- MÉTODOS DA INTERFACE REPRODUZIVEL ---
+
+    @Override
+    public void reproduzir() {
+        System.out.println("🎵 Reproduzindo playlist: " + getNome());
+        for (Musica m : musicas) {
+            System.out.println("  ▶ " + m.getNome());
+        }
+    }
+
+    @Override
+    public void pausar() {
+        System.out.println("⏸ Pausando playlist: " + getNome());
+    }
+
+    @Override
+    public void parar() {
+        System.out.println("⏹ Parando playlist: " + getNome());
+    }
+
+    @Override
     public int getDuracaoTotal() {
         int duracaoTotal = 0;
-        
-        // Percorre a lista de músicas para achar a duração de cada uma e depois somar o total
-        for (int indice = 0; indice < musicas.size(); indice++) {
-            Musica m = musicas.get(indice);
-            duracaoTotal += m.getDuracao();
+        for (Musica m : musicas) {
+            duracaoTotal += m.getDuracaoTotal();
         }
         return duracaoTotal;
     }
-
-    public int getQuantidadeMusicas() { return musicas.size(); }
-
-    // Construtor Padrão
-    public Playlist() {
-        this("Desconhecido");
-    }
-
-    // Construtor parametrizado
-    public Playlist(String nome) {
-        setNome(nome);
-        this.musicas = new ArrayList<>();
-    }
-
 }
