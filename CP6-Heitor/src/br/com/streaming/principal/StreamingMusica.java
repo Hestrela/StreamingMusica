@@ -1,3 +1,6 @@
+package br.com.streaming.principal;
+
+import br.com.streaming.modelo.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -202,14 +205,14 @@ public class StreamingMusica {
                 usuarioAtual.criarPlaylist(nomePlaylist);
                 break;
             case 4:
-                // Se o usuário logado é premium, a opção de baixar música é ativada naturalmente
                 if (usuarioAtual instanceof UsuarioPremium) {
                     listarMusicas(acervo, "MÚSICAS");
                     System.out.print("Selecione a música desejada: ");
                     int musicaDesejada = lerOpcao() - 1;
                     Musica m = acervo.get(musicaDesejada);
-                    ((UsuarioPremium)usuarioAtual).baixarMusica(m); 
+                    ((UsuarioPremium)usuarioAtual).baixar(m); // Alterado aqui!
                     break;
+                }
                 // Caso contrário, apenas imprime uma mensage de erro
                 } else {
                     System.out.println("Função exclusiva para usuários premium!");
@@ -230,7 +233,6 @@ public class StreamingMusica {
     static void listarMusicas(ArrayList<Musica> lista, String tituloCabecalho) {
         System.out.println("\n=== " + tituloCabecalho + " ===");
 
-        // Valida se a lista das músicas está vazia
         if (lista.isEmpty()) {
             System.out.println("Nenhuma música encontrada.");
             return;
@@ -239,7 +241,7 @@ public class StreamingMusica {
         // Percorre a lista e imprime as informações de cada música
         for (int indice = 0; indice < lista.size(); indice++) {
              System.out.printf("%d. Nome: %s | Artista: %s | Duração: %d segundos | Gênero: %s%n"
-                , (indice + 1), lista.get(indice).getTitulo(), lista.get(indice).getArtista(), 
+                , (indice + 1), lista.get(indice).getNome(), lista.get(indice).getArtista(), 
                 lista.get(indice).getDuracao(), lista.get(indice).getGenero()
             );
         }
@@ -548,7 +550,7 @@ public class StreamingMusica {
         // Busco a música desejada pelo índice
         Musica m = acervo.get(indice);
         
-        System.out.println("Editando: " + m.getTitulo() + " - " + m.getArtista());
+        System.out.println("Editando: " + m.getNome() + " - " + m.getArtista());
         System.out.println("1. Editar Título");
         System.out.println("2. Editar Artista");
         System.out.println("3. Editar Duração");
@@ -597,7 +599,7 @@ public class StreamingMusica {
             // Flag de validação
             boolean achou = false;
             
-            if (tipo.equals("titulo") && m.getTitulo().toLowerCase().contains(termo)) {
+            if (tipo.equals("titulo") && m.getNome().toLowerCase().contains(termo)) {
                 achou = true;
             } else if (tipo.equals("artista") && m.getArtista().toLowerCase().contains(termo)) {
                 achou = true;
