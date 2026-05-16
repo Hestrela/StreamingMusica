@@ -1,14 +1,12 @@
 package br.com.streaming.modelo;
-import br.com.streaming.servico.Baixavel;
 
+import br.com.streaming.servico.Baixavel;
 import java.util.ArrayList;
 
-// Classe que representa o Usuário tipo premium, com os métodos padrões da classe Usuario + extras
 public final class UsuarioPremium extends Usuario implements Baixavel {
-    private String plano; // Mensal, Anual, Familiar
+    private String plano; 
     private ArrayList<Musica> musicasBaixadas;
 
-    // Construtor parametrizado
     public UsuarioPremium(String nome, String email, String plano) {
         super(nome, email);
         this.plano = plano;
@@ -17,20 +15,42 @@ public final class UsuarioPremium extends Usuario implements Baixavel {
     
     @Override
     public void reproduzirMusica(Musica musica) {
-        System.out.println("🎵 Reproduzindo em ALTA QUALIDADE: " + musica.getTitulo());
+
+        System.out.println("🎵 Reproduzindo em ALTA QUALIDADE: " + musica.getNome());
         historicoReproducao.add(musica);
     }
     
-    public void baixarMusica(Musica musica) {
-        // Se o array de músicas baixadas não tiver a música desejada, adiciona ela no array
+    // --- MÉTODOS OBRIGATÓRIOS DA INTERFACE BAIXAVEL ---
+    
+    @Override
+    public void baixar(Musica musica) {
         if (!musicasBaixadas.contains(musica)) {
             musicasBaixadas.add(musica);
-            System.out.println("⬇️ Música baixada: " + musica.getTitulo());
+            System.out.println("⬇️ Música baixada: " + musica.getNome());
         } else {
             System.out.println("ℹ️ Música já está baixada!");
         }
     }
-    
+
+    @Override
+    public void removerDownload(Musica musica) {
+        if (musicasBaixadas.contains(musica)) {
+            musicasBaixadas.remove(musica);
+            System.out.println("🗑️ Download removido: " + musica.getNome());
+        }
+    }
+
+    @Override
+    public boolean estaBaixada(Musica musica) {
+        return musicasBaixadas.contains(musica);
+    }
+
+    @Override
+    public int getTamanhoBaixados() {
+        return musicasBaixadas.size();
+    }
+
+    // Mantemos o listar para a interface do utilizador
     public void listarMusicasBaixadas() {
         System.out.println("\n--- MÚSICAS BAIXADAS ---");
         if (musicasBaixadas.isEmpty()) {
@@ -50,19 +70,8 @@ public final class UsuarioPremium extends Usuario implements Baixavel {
         System.out.println("Plano contratado: " + plano);
     }
 
-    public String getPlano() {
-        return plano;
-    }
-
-    public void setPlano(String plano) {
-        this.plano = plano;
-    }
-
-    public ArrayList<Musica> getMusicasBaixadas() {
-        return musicasBaixadas;
-    }
-
-    public void setMusicasBaixadas(ArrayList<Musica> musicasBaixadas) {
-        this.musicasBaixadas = musicasBaixadas;
-    }
+    public String getPlano() { return plano; }
+    public void setPlano(String plano) { this.plano = plano; }
+    public ArrayList<Musica> getMusicasBaixadas() { return musicasBaixadas; }
+    public void setMusicasBaixadas(ArrayList<Musica> musicasBaixadas) { this.musicasBaixadas = musicasBaixadas; }
 }
